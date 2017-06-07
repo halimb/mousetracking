@@ -4,8 +4,10 @@ body {
 }
 
 div {
-	border: .5vw solid white;
-	border-radius: 30%;
+	border-right: none;
+	border-left: .5vw solid black;
+	border-top: .5vw solid white;
+	border-bottom: .5vw solid green;
 	height: 5vw;
 	width: 5vw;
 /*	position: absolute; 
@@ -13,4 +15,23 @@ div {
 	left: 25vw;*/
 	margin: 1vw;
 	float: left;
+	transition: .5s;
+	visibility: hidden;
+	z-index: -1;
+}
+
+#test{
+	visibility: visible;
+}
+
+#display {
+	width: 100vw;
+	border: none;
+	position: absolute;
+	top: 5vw;
+	left: 5vw;
+	font-size: 5vw;
+	color: white;
+	z-index: 100;
+	visibility: visible;
 }
