@@ -1,13 +1,16 @@
 body {
 	background-color: #f55;
+	overflow: hidden;
 }
 
-canvas {
-	background-color: #fff;
-	height: 50vw;
-	width: 50vw;
-	position: absolute; 
-	top: 0; bottom: 0; 
-	right: 0; left: 0;
-	margin: auto;
+div {
+	border: .5vw solid white;
+	border-radius: 30%;
+	height: 5vw;
+	width: 5vw;
+/*	position: absolute; 
+	top: 25vw; 
+	left: 25vw;*/
+	margin: 1vw;
+	float: left;
 }
