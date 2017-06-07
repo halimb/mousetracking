@@ -40,6 +40,8 @@ document.onmousemove = function(e){
 
 var display = document.getElementById("display");
 
+var prevY = 0;
+
 function rotateTo(a, b) {
 	for(var i = 0; i < divs.length; i++) {
 		var div = divs[i]
@@ -47,15 +49,31 @@ function rotateTo(a, b) {
 		var x = div.offsetLeft + dim / 2;
 		var y = div.offsetTop + dim / 2;
 		var p = new Point(x, y);
-		var curr = p.angleTo(a, b);
+		var curr = p.angleTo(a, b) + laps[i] * 360;
+		if(div.id =="test") {
+			var dir = prevY - y;
+			if(Math.abs(prev[i] - curr) > 180) {
+				curr = dir > 0 ? 
+					curr + 360 : -360 + curr;
+				laps[i] += 
+					// Math.abs(prev[i]) < Math.abs(curr) ?
+					dir > 0 ?
+						1 : -1;
+				console.log(dir)
+			}
+				prevY = b;
 
-		if(div.id =="test") 
-		{
 			var x = p.x - dim/2;
 			var y = p.y - dim/2;
 			div.style.transform = 'rotate(' + -curr + 'deg)';
 			//console.log(curr)
+
+			display.innerHTML = "curr: " + curr + "<br>" + 
+								"prev: " + prev[i] + "<br>" + 
+								"laps: " + laps[i] ;
+			prev[i] = curr;
 		}
+		
 	}
 }
 
