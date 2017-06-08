@@ -1,8 +1,11 @@
-var divs = document.getElementsByClassName('div');
-var prev = Array(divs.length).fill(0);
-var laps = Array(divs.length).fill(0);
+const dim = 30;
+const GUTTER = 40;
+var ROWS = Math.floor(window.innerHeight / (dim + GUTTER));
+var COLS = Math.floor(window.innerWidth / (dim + GUTTER));
+var grid = document.getElementById('grid');
+var rows, h, cells, prev, laps, prevYs;
 var w = window.innerWidth;
-var h = window.innerHeight;
+var prevXpos = 0, prevYpos = 0;
 var xpos = 0, ypos = 0;
 
 function Point(x, y) {
@@ -29,52 +32,72 @@ function Point(x, y) {
 										360 + asin);
 		return angle;
 	}
-
 }
+
+/* Given a div height and a gutter dimension   *
+ * inflate the right number of divs in order  *
+ * to fill the whole screen                   */
+(function init() {
+	for(var i = 0; i < ROWS; i++) {
+		grid.innerHTML += '<div class="row"></div>';
+	}
+	rows = document.getElementsByClassName('row');
+	h = Math.floor(window.innerHeight / ROWS - GUTTER);
+	for(var i = 0; i < ROWS; i++) {
+		for(var j = 0; j < COLS; j++) {
+			var cell = '<div class="cell" style="margin: '+ 
+			h * 5/6 + GUTTER / 2+'px; height:'+h+'px;' + 
+			'width: ' + h/6 + 'px"></div>';
+			rows[i].innerHTML += cell;
+		}
+	}
+	cells = document.querySelectorAll(".cell");
+	prev = Array(cells.length).fill(0);
+	laps = Array(cells.length).fill(0);
+	prevYs = Array(cells.length).fill(0);
+})(); 
+
+window.onresize = function() {
+			h = rows[0].offsetWidth / ROWS - GUTTER;
+			for(var i = 0; i < cells.length; i++) {
+				cells[i].style.height = h + "px";
+			}
+		}
 
 document.onmousemove = function(e){
 				xpos = e.clientX;
 				ypos = e.clientY;
-				rotateTo(xpos, ypos);
+				if( true || Math.abs(prevXpos - xpos) > 10||
+					Math.abs(prevYpos - ypos) > 10 ) {
+					prevXpos = xpos;
+					prevYpos = ypos;
+					rotateTo(xpos, ypos);
+				}
 			}
 
-var display = document.getElementById("display");
-
-var prevY = 0;
-
 function rotateTo(a, b) {
-	for(var i = 0; i < divs.length; i++) {
-		var div = divs[i]
+	for(var i = 0; i < cells.length; i++) {
+		var div = cells[i]
 		var dim = div.offsetHeight;
 		var x = div.offsetLeft + dim / 2;
 		var y = div.offsetTop + dim / 2;
 		var p = new Point(x, y);
 		var curr = p.angleTo(a, b) + laps[i] * 360;
-		if(div.id =="test") {
-			var dir = prevY - y;
-			if(Math.abs(prev[i] - curr) > 180) {
-				curr = dir > 0 ? 
-					curr + 360 : -360 + curr;
-				laps[i] += 
-					// Math.abs(prev[i]) < Math.abs(curr) ?
-					dir > 0 ?
-						1 : -1;
-				console.log(dir)
-			}
-				prevY = b;
 
-			var x = p.x - dim/2;
-			var y = p.y - dim/2;
-			div.style.transform = 'rotate(' + -curr + 'deg)';
-			//console.log(curr)
+		/*Uncomment this block if transitions	*
+		  are enabled in css. this forces the 	*
+		  divs to always choose the shortest 	*
+		  rotation path							*/
+		// var dir = prevYs[i] - y;
+		// if(Math.abs(prev[i] - curr) > 180) {
+		// 	curr = dir > 0 ? 
+		// 		curr + 360 : -360 + curr;
+		// 	laps[i] += dir > 0 ? 1 : -1;
+		// }
+		// prevYs[i] = b;
+		// prev[i] = curr;
 
-			display.innerHTML = "curr: " + curr + "<br>" + 
-								"prev: " + prev[i] + "<br>" + 
-								"laps: " + laps[i] ;
-			prev[i] = curr;
-		}
-		
+		div.style.transform = 'rotate(' + -curr + 'deg)';	
 	}
 }
-
 
