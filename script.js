@@ -1,12 +1,11 @@
-const dim = 30;
-const GUTTER = 40;
-var ROWS = Math.floor(window.innerHeight / (dim + GUTTER));
-var COLS = Math.floor(window.innerWidth / (dim + GUTTER));
-var grid = document.getElementById('grid');
-var rows, h, cells, prev, laps, prevYs;
-var w = window.innerWidth;
-var prevXpos = 0, prevYpos = 0;
+const dim = 60;
+const GUTTER = 80;
 var xpos = 0, ypos = 0;
+var prevXpos = 0, prevYpos = 0;
+var grid = document.getElementById('grid');
+var rows, cellDim, cells, prev, laps, 
+	prevYs, maxDist, w, h, ROWS, COLS;
+var t = 0;
 
 function Point(x, y) {
 	this.x = x;
@@ -34,20 +33,28 @@ function Point(x, y) {
 	}
 }
 
-/* Given a div height and a gutter dimension   *
+init();
+/* Given a div height and a gutter dimension  *
  * inflate the right number of divs in order  *
  * to fill the whole screen                   */
-(function init() {
+function init() {
+	console.log("init()")
+	grid.innerHTML = "";
+	w = window.innerWidth;
+	h = window.innerHeight
+	ROWS = Math.floor(window.innerHeight / (dim + GUTTER));
+	COLS = Math.floor(window.innerWidth / (dim/2 + GUTTER));
 	for(var i = 0; i < ROWS; i++) {
 		grid.innerHTML += '<div class="row"></div>';
 	}
 	rows = document.getElementsByClassName('row');
-	h = Math.floor(window.innerHeight / ROWS - GUTTER);
+	cellDim = Math.floor(h / ROWS - GUTTER);
+	cellDim = cellDim * 100 / w;
 	for(var i = 0; i < ROWS; i++) {
 		for(var j = 0; j < COLS; j++) {
 			var cell = '<div class="cell" style="margin: '+ 
-			h * 5/6 + GUTTER / 2+'px; height:'+h+'px;' + 
-			'width: ' + h/6 + 'px"></div>';
+			 GUTTER / 2+'px;' + 
+			'height: '+cellDim+'vw; width: '+cellDim/2+'vw"></div>';
 			rows[i].innerHTML += cell;
 		}
 	}
@@ -55,19 +62,23 @@ function Point(x, y) {
 	prev = Array(cells.length).fill(0);
 	laps = Array(cells.length).fill(0);
 	prevYs = Array(cells.length).fill(0);
-})(); 
+	maxDist = Math.sqrt(
+				Math.pow( document.body.offsetWidth, 2 ) +
+				Math.pow( document.body.offsetHeight, 2 )
+			);
+	rotateTo(w/2, h/2);
+}; 
 
 window.onresize = function() {
-			h = rows[0].offsetWidth / ROWS - GUTTER;
-			for(var i = 0; i < cells.length; i++) {
-				cells[i].style.height = h + "px";
-			}
+			window.clearTimeout(t);
+			t = setTimeout(init, 400);
+			console.log("t = " + t);
 		}
 
 document.onmousemove = function(e){
 				xpos = e.clientX;
 				ypos = e.clientY;
-				if( true || Math.abs(prevXpos - xpos) > 10||
+				if( Math.abs(prevXpos - xpos) > 10||
 					Math.abs(prevYpos - ypos) > 10 ) {
 					prevXpos = xpos;
 					prevYpos = ypos;
@@ -79,8 +90,8 @@ function rotateTo(a, b) {
 	for(var i = 0; i < cells.length; i++) {
 		var div = cells[i]
 		var dim = div.offsetHeight;
-		var x = div.offsetLeft + dim / 2;
-		var y = div.offsetTop + dim / 2;
+		var x = div.offsetLeft + div.offsetWidth / 2;
+		var y = div.offsetTop + div.offsetHeight / 2;
 		var p = new Point(x, y);
 		var curr = p.angleTo(a, b) + laps[i] * 360;
 
@@ -88,22 +99,24 @@ function rotateTo(a, b) {
 		  are enabled in css. this forces the 	*
 		  divs to always choose the shortest 	*
 		  rotation path							*/
-		// var dir = prevYs[i] - y;
-		// if(Math.abs(prev[i] - curr) > 180) {
-		// 	curr = dir > 0 ? 
-		// 		curr + 360 : -360 + curr;
-		// 	laps[i] += dir > 0 ? 1 : -1;
-		// }
-		// prevYs[i] = b;
-		// prev[i] = curr;
+		var dir = prevYs[i] - y;
+		if(Math.abs(prev[i] - curr) > 180) {
+			curr = dir > 0 ? 
+				curr + 360 : -360 + curr;
+			laps[i] += dir > 0 ? 1 : -1;
+		}
+		prevYs[i] = b;
+		prev[i] = curr;
 
-		var c = 100 - Math.floor(100 * normalDist) ;
+		var normalDist = p.getDist(a, b) / maxDist;
+		var c = 255// - Math.floor(100 * normalDist) ;
+		var color = 'rgba(' + c + ',' + c + ',' + c + ', 1)';
+		var d = ".1vw"//(parseFloat(.3 + normalDist * 6).toFixed(4)) + 'vw';
+
+		var border = d + ' solid ' + color;
+		div.style.borderTop = border;
+
 		div.style.transform = 'rotate(' + -curr + 'deg)';
-		var o = new Point(0, 0);
-		var normalDist = p.getDist(a, b) / o.getDist(a, b);
-		div.style.borderColor = 
-			'rgba(' + c + ',' + c + ',' + c + ', 1)';	
-		div.borderTopWidth = parseFloat(normalDist * 2) + 'vw';
 	}
 }
 

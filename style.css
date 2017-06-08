@@ -1,5 +1,5 @@
 body {
-	background-color: #f99;
+	background-color: #f97;
 	overflow: hidden;
 }
 
@@ -18,6 +18,8 @@ body {
 
 .flex-grid {
 	z-index: -1;
+
+	margin-top: -2vw !important;
 	display: flex;
 	flex-direction: column;
 }
@@ -31,6 +33,6 @@ body {
 	/*transition: 1s;*/
 	border-right: none;
 	border-left: none;
-	border-bottom: .5vw solide black;
-	border-top: 1vw solid black;
+	border-bottom: none;
+	border-top: .1vw solid white;
 }
