@@ -1,5 +1,5 @@
 body {
-	background-color: #f55;
+	background-color: #f99;
 	overflow: hidden;
 }
 
@@ -30,7 +30,7 @@ body {
 	display: flex;
 	/*transition: 1s;*/
 	border-right: none;
-	border-bottom: none;
 	border-left: none;
-	border-top: .5vw solid white;
+	border-bottom: .5vw solide black;
+	border-top: 1vw solid black;
 }

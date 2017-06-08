@@ -97,7 +97,13 @@ function rotateTo(a, b) {
 		// prevYs[i] = b;
 		// prev[i] = curr;
 
-		div.style.transform = 'rotate(' + -curr + 'deg)';	
+		var c = 100 - Math.floor(100 * normalDist) ;
+		div.style.transform = 'rotate(' + -curr + 'deg)';
+		var o = new Point(0, 0);
+		var normalDist = p.getDist(a, b) / o.getDist(a, b);
+		div.style.borderColor = 
+			'rgba(' + c + ',' + c + ',' + c + ', 1)';	
+		div.borderTopWidth = parseFloat(normalDist * 2) + 'vw';
 	}
 }
 
