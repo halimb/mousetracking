@@ -98,9 +98,9 @@ function rotateTo(a, b) {
 		// prevYs[i] = b;
 		// prev[i] = curr;
 
-		var c = 150 - Math.floor(150 * dist) ;
-		var color = 'rgba(' + c + ',' + c + ',' + c + ', 1)';
-		div.childNodes[0].style.borderColor = color;
+		// var c = 255 - Math.floor(150 * dist) ;
+		// var color = 'rgba(' + c + ',' + c + ',' + c + ', 1)';
+		// div.childNodes[0].style.borderColor = color;
 		div.style.transform = 'rotate(' + -curr + 'deg)';
 	}
 }
