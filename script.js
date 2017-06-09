@@ -2,7 +2,7 @@ const dim = 100;
 
 var xpos = 0, ypos = 0;
 var grid = document.getElementById('grid');
-var rows, cellDim, cells, w, h, ROWS, COLS;
+var rows, cellDim, cells, w, h, ROWS, COLS, maxDist;
 var t = 0;
 
 function Point(x, y) {
@@ -54,6 +54,9 @@ function init() {
 		}
 	}
 	cells = document.querySelectorAll(".cell");
+
+	var origin = new Point(0, 0);
+	maxDist = origin.getDist(w, h);
 	rotateTo(w/2, h/2);
 }
 
@@ -75,7 +78,9 @@ function rotateTo(a, b) {
 		var x = div.offsetLeft + div.offsetWidth / 2;
 		var y = div.offsetTop + div.offsetHeight / 2;
 		var p = new Point(x, y);
-		var curr = p.angleTo(a, b);
+		var dist = p.getDist(a, b) / maxDist;
+		var curr = p.angleTo(a, b) + dist * 180;
+
 		div.style.transform = 'rotate(' + -curr + 'deg)';
 	}
 }

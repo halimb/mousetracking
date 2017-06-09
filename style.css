@@ -32,7 +32,8 @@ body {
 .row > .cell {
 	width: 100%;
 	display: flex;
-	padding: 2.5vw;
+	padding: 2vw;
+	transition: 1s;
 }
 
 .inner {
