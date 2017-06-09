@@ -1,8 +1,9 @@
-const dim = 100;
+const dim = 80;
 
 var xpos = 0, ypos = 0;
 var grid = document.getElementById('grid');
-var rows, cellDim, cells, w, h, ROWS, COLS, maxDist;
+var rows, cellDim, cells, prev, laps, 
+	prevYs, maxDist, w, h, ROWS, COLS;
 var t = 0;
 
 function Point(x, y) {
@@ -54,7 +55,9 @@ function init() {
 		}
 	}
 	cells = document.querySelectorAll(".cell");
-
+	prev = Array(cells.length).fill(0);
+	laps = Array(cells.length).fill(0);
+	prevYs = Array(cells.length).fill(0);
 	var origin = new Point(0, 0);
 	maxDist = origin.getDist(w, h);
 	rotateTo(w/2, h/2);
@@ -79,8 +82,25 @@ function rotateTo(a, b) {
 		var y = div.offsetTop + div.offsetHeight / 2;
 		var p = new Point(x, y);
 		var dist = p.getDist(a, b) / maxDist;
-		var curr = p.angleTo(a, b) + dist * 180;
+		var curr = p.angleTo(a, b) + dist * 270 + laps[i] * 360;
 
+
+		/*Uncomment this block if transitions	*
+		  are enabled in css. this forces the 	*
+		  divs to always choose the shortest 	*
+		  rotation path							*/
+		// var dir = prevYs[i] - y;
+		// if(Math.abs(prev[i] - curr) > 180) {
+		// 	curr = dir > 0 ? 
+		// 		curr + 360 : -360 + curr;
+		// 	laps[i] += dir > 0 ? 1 : -1;
+		// }
+		// prevYs[i] = b;
+		// prev[i] = curr;
+
+		var c = 150 - Math.floor(150 * dist) ;
+		var color = 'rgba(' + c + ',' + c + ',' + c + ', 1)';
+		div.childNodes[0].style.borderColor = color;
 		div.style.transform = 'rotate(' + -curr + 'deg)';
 	}
 }
