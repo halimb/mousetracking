@@ -1,5 +1,4 @@
-const dim = 60;
-const GUTTER = 80;
+const dim = 100;
 
 var xpos = 0, ypos = 0;
 var grid = document.getElementById('grid');
@@ -39,26 +38,24 @@ init();
 function init() {
 	grid.innerHTML = "";
 	w = window.innerWidth;
-	h = window.innerHeight
-	ROWS = Math.floor(window.innerHeight / (dim + GUTTER));
-	COLS = Math.floor(window.innerWidth / (dim/2 + GUTTER));
+	h = window.innerHeight;
+	ROWS = Math.ceil(window.innerHeight / dim);
+	COLS = Math.ceil(ROWS * (w / h));
 	for(var i = 0; i < ROWS; i++) {
 		grid.innerHTML += '<div class="row"></div>';
 	}
 	rows = document.getElementsByClassName('row');
-	cellDim = Math.floor(h / ROWS - GUTTER);
-	cellDim = cellDim * 100 / w;
 	for(var i = 0; i < ROWS; i++) {
 		for(var j = 0; j < COLS; j++) {
-			var cell = '<div class="cell" style="margin: '+ 
-			 GUTTER / 2+'px;' + 
-			'height: '+cellDim+'vw; width: '+cellDim/2+'vw"></div>';
+			var cell = '<div class="cell">'+
+							'<div class="inner"></div>'+
+						'</div>';
 			rows[i].innerHTML += cell;
 		}
 	}
 	cells = document.querySelectorAll(".cell");
 	rotateTo(w/2, h/2);
-}; 
+}
 
 window.onresize = function() {
 			window.clearTimeout(t);
@@ -67,10 +64,10 @@ window.onresize = function() {
 		}
 
 document.onmousemove = function(e){
-				xpos = e.clientX;
-				ypos = e.clientY;
-				rotateTo(xpos, ypos);
-			}
+			xpos = e.clientX;
+			ypos = e.clientY;
+			rotateTo(xpos, ypos);
+		}
 
 function rotateTo(a, b) {
 	for(var i = 0; i < cells.length; i++) {

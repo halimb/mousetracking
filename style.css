@@ -6,6 +6,7 @@ body {
 .wrapper {
 	display : flex;
 	flex-direction: column;
+	height: 96vh;
 }
 
 .main {
@@ -17,22 +18,25 @@ body {
 }
 
 .flex-grid {
+	height: 100%;
 	z-index: -1;
-
-	margin-top: -2vw !important;
 	display: flex;
 	flex-direction: column;
 }
 
 .flex-grid > .row {
+	height: 100%;
 	display: flex;
 }
 
 .row > .cell {
+	width: 100%;
 	display: flex;
-	/*transition: 1s;*/
-	border-right: none;
-	border-left: none;
-	border-bottom: none;
-	border-top: .1vw solid white;
+	padding: 2.5vw;
+}
+
+.inner {
+	height: 100%;
+	width: 100%;
+	border-top: 3px solid white;
 }
