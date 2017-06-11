@@ -32,11 +32,11 @@ body {
 .row > .cell {
 	width: 100%;
 	display: flex;
-	padding: 1vw;
+	padding: 2vw;
 }
 
 .inner {
-	height: 100%;
-	width: 100%;
-	border-top: .2vw solid white;
+	border-top: 5vw solid rgba(255,255,255,.2);
+	border-left: .5vw solid rgba(255,255,255,0);
+	border-right: .5vw solid rgba(255,255,255,0);
 }
